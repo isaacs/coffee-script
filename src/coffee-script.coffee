@@ -96,7 +96,7 @@ exports.run = (code, options = {}) ->
   mainModule.paths = require('module')._nodeModulePaths path.dirname fs.realpathSync options.filename or '.'
 
   # Compile.
-  if not helpers.isCoffee(mainModule.filename) or require.extensions
+  if not helpers.isCoffee(mainModule.filename)
     answer = compile(code, options)
     # Attach sourceMap object to mainModule._sourceMaps[options.filename] so that
     # it is accessible by Error.prepareStackTrace.
@@ -147,12 +147,6 @@ loadFile = (module, filename) ->
   raw = fs.readFileSync filename, 'utf8'
   stripped = if raw.charCodeAt(0) is 0xFEFF then raw.substring 1 else raw
   module._compile compile(stripped, {filename, literate: helpers.isLiterate filename}), filename
-
-# If the installed version of Node supports `require.extensions`, register
-# CoffeeScript as an extension.
-if require.extensions
-  for ext in ['.coffee', '.litcoffee', '.coffee.md']
-    require.extensions[ext] = loadFile
 
 # If we're on Node, patch `child_process.fork` so that Coffee scripts are able
 # to fork both CoffeeScript files, and JavaScript files, directly.

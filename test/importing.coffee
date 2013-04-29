@@ -13,6 +13,4 @@ unless window? or testingBrowser?
         exports.method = -> local
     else
       global[magicKey] = {}
-      if require?.extensions?
-        ok require(__filename).method() is magicValue
       delete global[magicKey]
